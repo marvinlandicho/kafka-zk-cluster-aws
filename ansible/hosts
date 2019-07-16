@@ -1,0 +1,9 @@
+[kafka]
+kafka-server-1 ansible_host=10.0.11.6 ansible_port=22 ansible_ssh_user=admin  ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+kafka-server-2 ansible_host=10.0.12.6 ansible_port=22 ansible_ssh_user=admin  ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+kafka-server-3 ansible_host=10.0.13.6 ansible_port=22 ansible_ssh_user=admin  ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[zookeeper]
+zookeeper-server-1 ansible_host=10.0.11.5 ansible_port=22 ansible_ssh_user=admin  ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+zookeeper-server-2 ansible_host=10.0.12.5 ansible_port=22 ansible_ssh_user=admin  ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+zookeeper-server-3 ansible_host=10.0.13.5 ansible_port=22 ansible_ssh_user=admin  ansible_ssh_common_args='-o StrictHostKeyChecking=no'

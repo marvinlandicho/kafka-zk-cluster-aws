@@ -1,0 +1,57 @@
+---
+
+- hosts: all
+  tasks:
+          - name: Create fs for data directory
+            filesystem:
+                    fstype: xfs
+                    dev: /dev/nvme1n1
+            become: true
+
+- hosts: zookeeper
+  tasks:
+          - name: Mount data directory
+            mount:
+                    path: /data/zookeeper
+                    src: /dev/nvme1n1
+                    state: mounted
+                    fstype: xfs
+                    opts: noatime
+            become: true
+
+          - name: Set acl to mountpoint
+            acl:
+                    path: /data/zookeeper
+                    entity: zookeeper
+                    etype: user
+                    permissions: rwx
+                    state: present
+            become: true
+
+          - name: Start zookeeper server
+            command: /usr/local/bin/zookeeper_config -E -i "{{ play_hosts.index(inventory_hostname) }}" -n 1:10.0.11.5 -i 2 -n 10.0.12.5 -i 3 -n 10.0.13.5  -S
+            become: true
+
+- hosts: kafka
+  tasks:
+          - name: Mount data directory
+            mount:
+                    path: /data/kafka
+                    src: /dev/nvme1n1
+                    state: mounted
+                    fstype: xfs
+                    opts: noatime
+            become: true
+
+          - name: Set acl to kf mountpoint
+            acl:
+                    path: /data/kafka
+                    entity: kafka
+                    etype: user
+                    permissions: rwx
+                    state: present
+            become: true
+
+          - name: Start kafka server
+            command: /usr/local/bin/kafka_config -i "{{ play_hosts.index(inventory_hostname) }}" -a "{{ ansible_host }}" -E -S -z 10.0.11.5:2181 -z 10.0.12.5:2181 -z 10.0.13.5:2181
+            become: true
